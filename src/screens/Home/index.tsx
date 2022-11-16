@@ -17,11 +17,11 @@ interface Task {
 export function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskInput, setTaskInput] = useState('');
-  const [taskCreated, setTaskCreated] = useState(0);
-  const [taskConcluded, setTaskConcluded] = useState(0);
-
 
   const { COLORS } = THEME;
+
+  const taskCreated = tasks.length;
+  const taskConcluded = tasks.filter(taks => taks.concluded === true).length;
 
   function handleCreateNewTask() {
     if (!taskInput) {
@@ -36,19 +36,14 @@ export function Home() {
     };
 
     setTasks(prevState => [...prevState, newTask]);
-    setTaskCreated(prevState => prevState + 1);
     setTaskInput('');
   }
 
   function handleDeleteTask(id: number) {
     setTasks(prevState => prevState.filter(taks => taks.id !== id));
-    setTaskCreated(prevState => prevState - 1);
   }
 
-  function changeCounterTaskConcluded() {
-    const tasksConcluded = tasks.filter(taks => taks.concluded === true);
-    setTaskConcluded(tasksConcluded.length);
-  }
+
 
   function handleConcludedTask(id: number) {
     const prevTasks = tasks.map(task => {
@@ -64,10 +59,6 @@ export function Home() {
 
     setTasks(prevTasks);
   }
-
-  useEffect(() => {
-    changeCounterTaskConcluded();
-  }, [tasks]);
 
   return (
     <>
